@@ -1,4 +1,6 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from 'axios';
+
+const APP_ID = 'e0c39463afb3b9a2701719f76e8560d5';
 
 export type PromiseManager<T> = {
   takeUntil: () => Promise<T>;
@@ -39,16 +41,12 @@ export function promiseManager<T>(
   };
 }
 
-function fetch<R>(
-  config: AxiosRequestConfig,
-): Promise<R> {
+function fetch<R>(config: AxiosRequestConfig): Promise<R> {
   return axios(config)
     .then((response) => {
-      console.log('hola: ', config);
-      return Promise.resolve(response.data)
+      return Promise.resolve(response.data);
     })
     .catch((error) => {
-      console.log('hola: ', config);
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -77,20 +75,24 @@ function fetch<R>(
 }
 
 type location = {
-  longitude: number,
-  latitude: number,
+  longitude: number;
+  latitude: number;
+};
+
+export function getWeather(location: location) {
+  const url = `https://api.openweathermap.org/data/2.5/weather?lang=es&lat=${location.latitude}&lon=${location.longitude}&units=metric&appid=${APP_ID}`;
+
+  return fetch({
+    url,
+    method: 'get',
+  });
 }
 
-export function getWeather(
-  location: location
-) {
-  const url = `https://api.openweathermap.org/data/2.5/weather?lang=es&lat=${location.latitude}&lon=${location.longitude}&units=metric&appid=e0c39463afb3b9a2701719f76e8560d5`;
+export function getWeatherByCity(city: string) {
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APP_ID}`;
 
-  return fetch(
-    {
-      url,
-      method: 'get',
-    },
-  );
+  return fetch({
+    url,
+    method: 'get',
+  });
 }
-
