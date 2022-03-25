@@ -4,7 +4,7 @@ import { UserContext, UserContextValue } from '../../providers/UserProvider';
 
 const getWeatherApi = promiseManager(getWeather);
 
-export const MyLocation = () => {
+export const ByLocation = () => {
   const {
     globalConfig: { answer, location, position },
   }: UserContextValue = useContext(UserContext);

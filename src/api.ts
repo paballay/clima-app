@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 const APP_ID = 'e0c39463afb3b9a2701719f76e8560d5';
+const EXCLUDE = 'current,minutely,hourly';
 
 export type PromiseManager<T> = {
   takeUntil: () => Promise<T>;
@@ -90,6 +91,15 @@ export function getWeather(location: location) {
 
 export function getWeatherByCity(city: string) {
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APP_ID}`;
+
+  return fetch({
+    url,
+    method: 'get',
+  });
+}
+
+export function getWeatherByDay(location: location) {
+  const url = `https://api.openweathermap.org/data/2.5/onecall?exclude=${EXCLUDE}&lat=${location.latitude}&lon=${location.longitude}&appid=${APP_ID}`;
 
   return fetch({
     url,
