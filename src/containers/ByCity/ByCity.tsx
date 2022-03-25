@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { getWeatherByCity, promiseManager } from '../../api';
+import { getWeatherByCity } from '../../api';
+import { CITIES } from '../../utils/constants';
 
 type State = {
   city: string;
 };
-
-const getWeatherByCityApi = promiseManager(getWeatherByCity);
 
 export const ByCity = () => {
   const [state, setState] = useState<State>({
@@ -15,8 +14,7 @@ export const ByCity = () => {
   const handleChangeCity = ({ target }: any) => {
     setState({ ...state, city: target.value });
 
-    getWeatherByCityApi(target.value)
-      .takeLast()
+    getWeatherByCity(target.value)
       .then((data) => {
         console.log(data);
       })
@@ -27,13 +25,12 @@ export const ByCity = () => {
 
   return (
     <>
-      <label htmlFor="city">Choose a car:</label>
+      <label htmlFor="city">Elije una ciudad:</label>
 
       <select name="city" id="city" onChange={handleChangeCity}>
-        <option value="barcelona">Barcelona</option>
-        <option value="manchester">Manchester</option>
-        <option value="new york">New York</option>
-        <option value="sydney">Sydney</option>
+        {
+          CITIES.map(e => <option value={e.id} key={e.id}>{e.name}</option>)
+        }
       </select>
     </>
   );

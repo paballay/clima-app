@@ -34,3 +34,36 @@ export function getMinDateCalendar(): string {
 
   return minDate;
 }
+
+export function getMaxDateCalendar(): string {
+  let maxDate: string = '';
+  let maxDay: number = 0;
+  let maxMonth: number = 0;
+  let maxYear: number = 0;
+  let getLastDayOfMonth: number = 0;
+  const currentDate = new Date();
+  const currentDay = currentDate.getDate();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+
+  getLastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate();
+  if((currentDay + 7) <= getLastDayOfMonth) {
+    maxYear = currentYear;
+    maxMonth = currentMonth;
+    maxDay = currentDay + 7;
+  } else {
+    if(currentMonth === 12) {
+      maxMonth = 1;
+      maxYear = currentYear + 1;
+    } else {
+      maxYear = currentYear;
+      maxMonth = currentMonth + 1 ;
+    }
+    const restDays = (getLastDayOfMonth - currentDay);
+    maxDay = 7 - restDays;
+  }
+
+  maxDate = new Date (`${maxYear}-${maxMonth}-${maxDay}`).toISOString().substring(0, 10);
+
+  return maxDate;
+}

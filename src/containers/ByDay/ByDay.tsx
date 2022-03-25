@@ -1,14 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { getWeatherByDay, promiseManager } from '../../api';
+import { getWeatherByDayForecast, getWeatherByDayHistory } from '../../api';
 import { UserContext, UserContextValue } from '../../providers/UserProvider';
-import { getCurrentDate, getMinDateCalendar } from '../../utils/utils';
+import { getMaxDateCalendar, getMinDateCalendar } from '../../utils/utils';
 
 type State = {
-  startDate: string;
-  endDate: string;
+  date: string;
   minDate: string;
+  maxDate: string,
 }
-const getWeatherByDayAPI = promiseManager(getWeatherByDay);
 
 export const ByDay = () => {
   const {
@@ -16,34 +15,47 @@ export const ByDay = () => {
   }: UserContextValue = useContext(UserContext);
 
   const [state, setState] = useState<State>({
-    startDate: '',
-    endDate: '',
+    date: '',
     minDate: '',
+    maxDate: '',
   });
 
-  const { startDate, endDate, minDate } = state;
+  const { date, minDate, maxDate } = state;
 
   useEffect(() => {
-    setState({ ...state, minDate: getMinDateCalendar() })
+    setState({ ...state, minDate: getMinDateCalendar(), maxDate: getMaxDateCalendar() })
   }, [])
+
   const handleSearch = () => {
-    // getWeatherByDayAPI(position)
-    //   .takeLast()
-    //   .then(({ daily, timezone}: any) => {
-    //     daily.forEach((el: any, i: any) => {
-    //       console.log('Dia ', i, ': ', new Date(el.dt * 1000));
-    //     })
-    //   })
-    console.log(Math.floor(new Date(startDate).getTime() / 1000));
+    const dateFormat = date.replaceAll('-', '/');
+    const dateFormat2 = `${new Date().getFullYear()}/${new Date().getMonth() + 1}/${new Date().getDate()}`;
+
+    const unixTime1 = Math.floor(new Date(dateFormat).getTime() / 1000)
+    const unixTime2 = Math.floor(new Date(dateFormat2).getTime() / 1000)
+
+    if(unixTime1 <= unixTime2) {
+      getWeatherByDayHistory(position, unixTime1)
+        .then(data => {
+          console.log(data)
+        })
+        .catch(e => {
+          console.log(e);
+        })
+    } else {
+      getWeatherByDayForecast(position)
+        .then(data => {
+          console.log(data)
+        })
+        .catch(e => {
+          console.log(e);
+        })
+    }
   }
 
   return (
     <>
-      <label htmlFor='minDate'>Min Date</label>
-      <input id="minDate" type="date" value={startDate} min={minDate} onChange={({ target }) => setState({ ...state, startDate: target.value})}/>
-
-      <label htmlFor='maxDate'>Min Date</label>
-      <input id="maxDate" type="date" value={endDate} min={minDate} onChange={({ target }) => setState({ ...state, endDate: target.value})}/>
+      <label htmlFor='minDate'>Pick Date</label>
+      <input id="minDate" type="date" value={date} min={minDate} max={maxDate} onChange={({ target }) => setState({ ...state, date: target.value})}/>
 
       <button onClick={handleSearch}>Ver clima</button>
     </>

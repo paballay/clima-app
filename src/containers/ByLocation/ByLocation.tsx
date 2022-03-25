@@ -1,8 +1,6 @@
 import React, { useContext, useEffect } from 'react';
-import { getWeather, promiseManager } from '../../api';
+import { getWeather } from '../../api';
 import { UserContext, UserContextValue } from '../../providers/UserProvider';
-
-const getWeatherApi = promiseManager(getWeather);
 
 export const ByLocation = () => {
   const {
@@ -11,8 +9,7 @@ export const ByLocation = () => {
 
   useEffect(() => {
     if (position.latitude !== null && position.longitude !== null) {
-      getWeatherApi(position)
-        .takeLast()
+      getWeather(position)
         .then((data: any) => {
           console.log(data);
         });

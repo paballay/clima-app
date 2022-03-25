@@ -1,4 +1,5 @@
 import React, { createContext, ReactNode, useEffect, useState } from "react";
+import { COORDS_DEFAULT } from "../utils/constants";
 
 type Position = {
   latitude: number | null;
@@ -56,6 +57,8 @@ const UserProviderComponent = (props: Props) => {
       setState({
         ...state,
         setAnswer: true,
+        setLocation: false,
+        location: COORDS_DEFAULT,
       });
     });
   }, []);
