@@ -10,22 +10,9 @@
   cursor: pointer;
 }
 
-.containerCard {
-  margin: 10px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
 .container {
   display: grid;
   grid-template-columns: 1fr 3fr;
   gap: 20px;
 }
 
-.cardColumnOne,
-.cardColumnTwo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-}

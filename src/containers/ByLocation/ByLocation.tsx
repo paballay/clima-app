@@ -9,10 +9,14 @@ export const ByLocation = () => {
 
   useEffect(() => {
     if (position.latitude !== null && position.longitude !== null) {
-      getWeather(position)
-        .then(({ data }: any) => {
-          console.log(data);
-        });
+      const res = getWeather(position)
+      console.log(res);
+        // .then(data => {
+        //   console.log('data: ', data);
+        // })
+        // .catch(error => {
+        //   console.log('error:', error)
+        // });
     }
   }, [position]);
 

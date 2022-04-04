@@ -71,3 +71,11 @@ export function getMaxDateCalendar(): string {
 export function getHours (unixTime: number): string {
   return new Date(unixTime * 1000).toUTCString();
 }
+
+export function formatString (timezone: string): string {
+  const arrayStr = timezone.split('/')
+  const country = arrayStr[arrayStr.length - 2].replaceAll('_', ' ');
+  const zone = arrayStr[arrayStr.length - 1].replaceAll('_', ' ');
+
+  return `${country} - ${zone}`;
+}

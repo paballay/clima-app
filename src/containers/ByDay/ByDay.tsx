@@ -1,18 +1,20 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { getWeatherByDayForecast, getWeatherByDayHistory } from 'api';
 import { UserContext, UserContextValue } from 'providers/UserProvider';
-import { getHours, getMaxDateCalendar, getMinDateCalendar } from 'utils/utils';
+import { formatString, getHours, getMaxDateCalendar, getMinDateCalendar } from 'utils/utils';
 import { WeatherHistoryDTO, Nulleable } from 'DTOs';
 import { CurrentDTO } from 'DTOs/CurrentDTO';
 import styles from './ByDay.module.scss';
 import { Card } from 'components/Card/Card';
+import { getIconWeather } from 'utils/constants';
+import { CalendarInput } from 'components/CalendarInput/CalendarInput';
+import { TableWeather } from 'components/TableWeather/TableWeather';
 
 const {
   listItems,
   items,
   container,
-  card,
-  containerCard,
+  cardcontainer,
   cardColumnOne,
   cardColumnTwo,
 } = styles;
@@ -66,6 +68,7 @@ export const ByDay = () => {
       if (unixTime1 <= unixTime2) {
         getWeatherByDayHistory(position, unixTime1)
           .then(({ data }: any) => {
+
             setState({ ...state, history: true, dataHistory: data });
           })
           .catch((e) => {
@@ -95,14 +98,12 @@ export const ByDay = () => {
   return (
     <div className={container}>
       <div>
-        <label htmlFor="minDate">Pick Date</label>
-        <input
-          id="minDate"
-          type="date"
-          value={date}
-          min={minDate}
-          max={maxDate}
-          onChange={handleChange}
+        <CalendarInput
+          label={'Elegir día'}
+          date={date}
+          minDate={minDate}
+          maxDate={maxDate}
+          handleChange={handleChange}
         />
         {history && (
           <ul className={listItems}>
@@ -115,22 +116,9 @@ export const ByDay = () => {
         )}
       </div>
       <div>
-        {showInfo && (
-          <Card>
-            <div className={containerCard}>
-              <div className={cardColumnOne}>
-                <label>Ciudad: {dataHours?.temp}</label>
-                <label>Temperatura: {dataHours?.temp}</label>
-                <label>Temperatura: {dataHours?.temp}</label>
-              </div>
-              <div className={cardColumnTwo}>
-                <label>Temperatura: {dataHours?.temp}</label>
-                <label>Temperatura: {dataHours?.temp}</label>
-                <label>Temperatura: {dataHours?.temp}</label>
-                <label>Temperatura: {dataHours?.temp}</label>
-                <label>Temperatura: {dataHours?.temp}</label>
-              </div>
-            </div>
+        {showInfo && dataHours && dataHistory && (
+          <Card title={formatString(dataHistory.timezone)}>
+            <TableWeather dataHours={dataHours} />
           </Card>
         )}
       </div>

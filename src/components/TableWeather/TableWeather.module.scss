@@ -1,0 +1,13 @@
+.cardColumnOne,
+.cardColumnTwo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.cardcontainer {
+  margin: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}

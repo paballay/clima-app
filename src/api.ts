@@ -9,20 +9,38 @@ const instanceOneCall = axios.create({
   baseURL: 'https://api.openweathermap.org/data/2.5/onecall',
 });
 
+instanceDefault.interceptors.response.use(function (response) {
+  // console.log('response: ', response);
+  return response;
+}, function (error) {
+  console.log('error: ', error)
+  // console.log('error: ', error);
+  // Any status codes that falls outside the range of 2xx cause this function to trigger
+  // Do something with response error
+  // return Promise.reject(error);
+});
+
 type location = {
   longitude: number | null;
   latitude: number | null;
 };
 
 export function getWeather({ latitude, longitude}: location) {
-  return instanceDefault.get('/weather', {
+  instanceDefault.get('/weather', {
     params: {
       lang: 'es',
       lat: latitude,
       lon: longitude,
-      appid: APP_ID,
+      // appid: APP_ID,
+      appid: 'APP_ID',
       units: 'metric',
     }
+  })
+  .then(data => {
+    return data;
+  })
+  .catch(error => {
+    return error;
   });
 };
 
