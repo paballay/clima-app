@@ -67,3 +67,7 @@ export function getMaxDateCalendar(): string {
 
   return maxDate;
 }
+
+export function getHours (unixTime: number): string {
+  return new Date(unixTime * 1000).toUTCString();
+}

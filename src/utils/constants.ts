@@ -1,3 +1,7 @@
+export function getIconWeather(iconCode: string) {
+  return `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+}
+
 export const APP_ID = process.env.REACT_APP_APP_ID;
 export const EXCLUDE = process.env.REACT_APP_EXCLUDE;
 

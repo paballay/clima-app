@@ -1,53 +1,64 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { APP_ID, EXCLUDE } from './utils/constants';
 
-function callApi<R>(config: AxiosRequestConfig): Promise<R> {
-  return axios(config)
-    .then(({ data }) => {
-      return Promise.resolve(data);
-    })
-    .catch(error => {
-      return Promise.reject('Error interno de la aplicación.');
-    });
-}
+const instanceDefault = axios.create({
+  baseURL: 'https://api.openweathermap.org/data/2.5/',
+});
+
+const instanceOneCall = axios.create({
+  baseURL: 'https://api.openweathermap.org/data/2.5/onecall',
+});
 
 type location = {
   longitude: number | null;
   latitude: number | null;
 };
 
-export function getWeather(location: location) {
-  const url = `https://api.openweathermap.org/data/2.5/weather?lang=es&lat=${location.latitude}&lon=${location.longitude}&units=metric&appid=${APP_ID}`;
-
-  return callApi({
-    url,
-    method: 'get',
+export function getWeather({ latitude, longitude}: location) {
+  return instanceDefault.get('/weather', {
+    params: {
+      lang: 'es',
+      lat: latitude,
+      lon: longitude,
+      appid: APP_ID,
+      units: 'metric',
+    }
   });
-}
+};
 
 export function getWeatherByCity(city: string) {
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APP_ID}`;
-
-  return callApi({
-    url,
-    method: 'get',
+  return instanceDefault.get('/weather', {
+    params: {
+      q: city,
+      lang: 'es',
+      appid: APP_ID,
+      units: 'metric',
+    }
   });
 }
 
-export function getWeatherByDayForecast (location: location) {
-  const url = `https://api.openweathermap.org/data/2.5/onecall?exclude=${EXCLUDE}&lat=${location.latitude}&lon=${location.longitude}&appid=${APP_ID}`;
-
-  return callApi({
-    url,
-    method: 'get',
+export function getWeatherByDayForecast ({ latitude, longitude}: location) {
+  return instanceOneCall.get('/', {
+    params: {
+      lang: 'es',
+      lat: latitude,
+      lon: longitude,
+      appid: APP_ID,
+      units: 'metric',
+      exclude: EXCLUDE,
+    }
   });
 }
 
-export function getWeatherByDayHistory(location: location, time: number) {
-  const url = `https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${location.latitude}&lon=${location.longitude}&dt=${time}&appid=${APP_ID}`;
-
-  return callApi({
-    url,
-    method: 'get',
+export function getWeatherByDayHistory({ latitude, longitude}: location, time: number) {
+  return instanceOneCall.get('/timemachine', {
+    params: {
+      dt: time,
+      lang: 'es',
+      lat: latitude,
+      lon: longitude,
+      appid: APP_ID,
+      units: 'metric',
+    }
   });
 }

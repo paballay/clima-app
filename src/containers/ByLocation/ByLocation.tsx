@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
-import { getWeather } from '../../api';
-import { UserContext, UserContextValue } from '../../providers/UserProvider';
+import { getWeather } from 'api';
+import { UserContext, UserContextValue } from 'providers/UserProvider';
 
 export const ByLocation = () => {
   const {
@@ -10,7 +10,7 @@ export const ByLocation = () => {
   useEffect(() => {
     if (position.latitude !== null && position.longitude !== null) {
       getWeather(position)
-        .then((data: any) => {
+        .then(({ data }: any) => {
           console.log(data);
         });
     }
@@ -21,7 +21,8 @@ export const ByLocation = () => {
       {!answer ? (
         <div>Por favor seleccione si desea activar la ubicación</div>
       ) : (
-        <></>
+        <div className='container'>
+        </div>
       )}
     </>
   );

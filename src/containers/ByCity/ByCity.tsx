@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { getWeatherByCity } from '../../api';
-import { CITIES } from '../../utils/constants';
+import { getWeatherByCity } from 'api';
+import { CITIES } from 'utils/constants';
 
 type State = {
   city: string;
