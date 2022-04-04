@@ -1,7 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { getWeatherByDayForecast, getWeatherByDayHistory } from 'api';
 import { UserContext, UserContextValue } from 'providers/UserProvider';
-import { formatString, getHours, getMaxDateCalendar, getMinDateCalendar } from 'utils/utils';
+import {
+  dateToUnixTime,
+  formatString,
+  getHours,
+  getMaxDateCalendar,
+  getMinDateCalendar,
+} from 'utils/utils';
 import { WeatherHistoryDTO, Nulleable } from 'DTOs';
 import { CurrentDTO } from 'DTOs/CurrentDTO';
 import styles from './ByDay.module.scss';
@@ -9,6 +15,7 @@ import { Card } from 'components/Card/Card';
 import { getIconWeather } from 'utils/constants';
 import { CalendarInput } from 'components/CalendarInput/CalendarInput';
 import { TableWeather } from 'components/TableWeather/TableWeather';
+import { formatCurrentDateToString } from '../../utils/utils';
 
 const {
   listItems,
@@ -57,18 +64,12 @@ export const ByDay = () => {
 
   useEffect(() => {
     if (date !== '') {
-      const dateFormat = date.replaceAll('-', '/');
-      const dateFormat2 = `${new Date().getFullYear()}/${
-        new Date().getMonth() + 1
-      }/${new Date().getDate()}`;
-
-      const unixTime1 = Math.floor(new Date(dateFormat).getTime() / 1000);
-      const unixTime2 = Math.floor(new Date(dateFormat2).getTime() / 1000);
+      const unixTime1 = dateToUnixTime(date);
+      const unixTime2 = dateToUnixTime(formatCurrentDateToString());
 
       if (unixTime1 <= unixTime2) {
         getWeatherByDayHistory(position, unixTime1)
           .then(({ data }: any) => {
-
             setState({ ...state, history: true, dataHistory: data });
           })
           .catch((e) => {
