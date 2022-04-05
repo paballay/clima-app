@@ -10,20 +10,16 @@ import {
 } from 'utils/utils';
 import { WeatherHistoryDTO, Nulleable } from 'DTOs';
 import { CurrentDTO } from 'DTOs/CurrentDTO';
-import styles from './ByDay.module.scss';
 import { Card } from 'components/Card/Card';
-import { getIconWeather } from 'utils/constants';
 import { CalendarInput } from 'components/CalendarInput/CalendarInput';
 import { TableWeather } from 'components/TableWeather/TableWeather';
 import { formatCurrentDateToString } from '../../utils/utils';
+import styles from './ByDay.module.scss';
 
 const {
   listItems,
   items,
   container,
-  cardcontainer,
-  cardColumnOne,
-  cardColumnTwo,
 } = styles;
 
 type State = {
@@ -51,8 +47,15 @@ export const ByDay = () => {
     dataHours: null,
   });
 
-  const { date, minDate, maxDate, history, dataHistory, showInfo, dataHours } =
-    state;
+  const {
+    date,
+    minDate,
+    maxDate,
+    history,
+    dataHistory,
+    showInfo,
+    dataHours
+  } = state;
 
   useEffect(() => {
     setState({
